@@ -138,14 +138,53 @@ int main(int argc, char* args[])
 {
 
 	int dfi{};
+	int d1{};
+	int d2{};
 	double krok{};
 	int dkkrok{};
-	std::cout << "Podaj krok: ";
-	std::cin >> krok;
-	std::cout << "Podaj kat: ";
-	std::cin >> dfi;
-	std::cout << "Podaj delta krok: ";
-	std::cin >> dkkrok;
+	int algo{};
+	int m{};
+	std::cout << "Wybierz algorytm:"<<"\n"<<" 1) Spirala wielokatna"<<"\n" << " 2) Gwiazda" << "\n";
+	std::cin >> algo;
+		switch (algo)
+		{
+			case 1:
+			{
+				std::cout << "Wybrano spirale\n";
+				std::cout << "Podaj krok: ";
+				std::cin >> krok;
+				std::cout << "Podaj kat: ";
+				std::cin >> dfi;
+				std::cout << "Podaj delta krok: ";
+				std::cin >> dkkrok;
+			break;
+			}
+			case 2:
+			{
+				std::cout << "Wybrano gwiazde\n";
+				std::cout << "Podaj krok: ";
+				std::cin >> krok;
+				std::cout << "Podaj pierwszy kat: ";
+				std::cin >> d1;
+				std::cout << "Podaj drugi kat: ";
+				std::cin >> d2;
+				std::cout << "Modul: ";
+				std::cin >> m;
+			break;
+			}
+
+			default:
+			{
+				std::cout << "Domyœlnie wybrano spirale ";
+				std::cout << "Podaj krok: ";
+				std::cin >> krok;
+				std::cout << "Podaj kat: ";
+				std::cin >> dfi;
+				std::cout << "Podaj delta krok: ";
+				std::cin >> dkkrok;
+				break;
+			}
+		}
 
 	int fi{ 0 };
 	int k1{ 400 };
@@ -154,6 +193,7 @@ int main(int argc, char* args[])
 	int k2{};
 	int w2{};
 	bool doonce{ true };
+	int l{};
 
 	//Start up SDL and create window
 	if( !init() )
@@ -196,21 +236,52 @@ int main(int argc, char* args[])
 				if (doonce)
 				{
 				//	std::cout << doonce;
-					
-					for (int i=1; i <= 100; ++i)
+					switch (algo)
 					{
-						omega = 3.1415 / 180 * fi;
-						k2 = k1 + round(krok * cos(omega));
-						w2 = w1 - round(krok * sin(omega));
-						fi += dfi;
-						if (fi > 360) { fi -= 360; }
-						//std::cout << k1 << " " << w1 << " " << k2 << " " << w2 << " " << omega << '\n';
-						SDL_RenderDrawLine(gRenderer, k1, w1, k2, w2);
-						SDL_RenderPresent(gRenderer);
-						k1 = k2;
-						w1 = w2;
-						krok += dkkrok;
-					};
+						case 1:
+						{
+
+							for (int i = 1; i <= 100; ++i)
+							{
+								omega = 3.1415 / 180 * fi;
+								k2 = k1 + round(krok * cos(omega));
+								w2 = w1 - round(krok * sin(omega));
+								fi += dfi;
+								if (fi > 360) { fi -= 360; }
+								//std::cout << k1 << " " << w1 << " " << k2 << " " << w2 << " " << omega << '\n';
+								SDL_RenderDrawLine(gRenderer, k1, w1, k2, w2);
+								SDL_RenderPresent(gRenderer);
+								k1 = k2;
+								w1 = w2;
+								krok += dkkrok;
+							}
+							break;
+						}
+						case 2:
+						{
+
+							for (int i = 1; i <= 250; ++i)
+							{
+								omega = 3.1415 / 180 * fi;
+								k2 = k1 + round(krok * cos(omega));
+								w2 = w1 - round(krok * sin(omega));
+
+								//std::cout << k1 << " " << w1 << " " << k2 << " " << w2 << " " << omega << '\n';
+								SDL_RenderDrawLine(gRenderer, k1, w1, k2, w2);
+								SDL_RenderPresent(gRenderer);
+								k1 = k2;
+								w1 = w2;
+								if (l % m == 0) { dfi = d1; }
+								else dfi = d2;
+								//krok += dkkrok;
+								fi += dfi;
+								if (fi > 360) { fi -= 360; }
+								++l;
+							}
+							break;
+						}
+						
+					}
 				
 				}
 				doonce = false;
