@@ -205,9 +205,7 @@ int main(int argc, char* args[])
 						w2 = w1 - round(krok * sin(omega));
 						fi += dfi;
 						if (fi > 360) { fi -= 360; }
-						std::cout << k1 << " " << w1 << " " << k2 << " " << w2 << " " << omega << '\n';
-
-						//SDL_SetRenderDrawColor(gRenderer, 0xFF, 0x00, 0x00, 0xFF);
+						//std::cout << k1 << " " << w1 << " " << k2 << " " << w2 << " " << omega << '\n';
 						SDL_RenderDrawLine(gRenderer, k1, w1, k2, w2);
 						SDL_RenderPresent(gRenderer);
 						k1 = k2;
