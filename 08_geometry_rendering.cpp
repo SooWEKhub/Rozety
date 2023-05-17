@@ -10,8 +10,9 @@
 #include <iostream>
 
 //Screen dimension constants
-const int SCREEN_WIDTH = 800;
-const int SCREEN_HEIGHT = 600;
+const int SCREEN_WIDTH = 1024;
+const int SCREEN_HEIGHT = 768;
+const double radiany = 3.1415 / 180;
 
 //Starts up SDL and creates window
 bool init();
@@ -133,6 +134,11 @@ SDL_Texture* loadTexture( std::string path )
 
 	return newTexture;
 }
+int przelicz(bool czycos, double krok, int fi)
+{
+	if (czycos) return static_cast<int>(round(krok * cos(radiany * fi)));
+	return static_cast<int>(round(krok* sin(radiany* fi)));
+}
 
 int main(int argc, char* args[])
 {
@@ -144,6 +150,13 @@ int main(int argc, char* args[])
 	int dkkrok{};
 	int algo{};
 	int m{};
+	int fi{ 0 };
+	bool doonce{ true };
+	bool jeszczeraz{ 1 };
+	char wybor{};
+
+	while (jeszczeraz)
+	{
 	std::cout << "Wybierz algorytm:"<<"\n"<<" 1) Spirala wielokatna"<<"\n" << " 2) Gwiazda" << "\n";
 	std::cin >> algo;
 		switch (algo)
@@ -151,11 +164,11 @@ int main(int argc, char* args[])
 			case 1:
 			{
 				std::cout << "Wybrano spirale\n";
-				std::cout << "Podaj krok: ";
+				std::cout << "Podaj krok (np. 10): ";
 				std::cin >> krok;
-				std::cout << "Podaj kat: ";
+				std::cout << "Podaj kat (np. 144): ";
 				std::cin >> dfi;
-				std::cout << "Podaj delta krok: ";
+				std::cout << "Podaj delta krok (np.5): ";
 				std::cin >> dkkrok;
 			break;
 			}
@@ -182,73 +195,71 @@ int main(int argc, char* args[])
 				std::cin >> dfi;
 				std::cout << "Podaj delta krok: ";
 				std::cin >> dkkrok;
+				algo = 1;
 				break;
 			}
-		}
-
-	int fi{ 0 };
-	int k1{ 400 };
-	int w1{ 300 };
-	double omega{};
-	int k2{};
-	int w2{};
-	bool doonce{ true };
-	int l{};
-
-	//Start up SDL and create window
-	if( !init() )
-	{
-		printf( "Failed to initialize!\n" );
-	}
-	else
-	{
-		//Load media
-		if( !loadMedia() )
+		}	
+	
+		//Start up SDL and create window
+		if (!init())
 		{
-			printf( "Failed to load media!\n" );
+			printf("Failed to initialize!\n");
 		}
 		else
-		{	
-			//Main loop flag
-			bool quit = false;
-
-			//Event handler
-			SDL_Event e;
-
-			//Clear screen
-			SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
-			SDL_RenderClear(gRenderer);
-			SDL_SetRenderDrawColor(gRenderer, 0xFF, 0x00, 0x00, 0xFF);
-
-			//While application is running
-			while (!quit)
+		{
+			//Load media
+			if (!loadMedia())
 			{
-				//Handle events on queue
-				while (SDL_PollEvent(&e) != 0)
-				{
-					//User requests quit
-					if (e.type == SDL_QUIT)
-					{
-						quit = true;
-					}
-				}
+				printf("Failed to load media!\n");
+			}
+			else
+			{
+				//Main loop flag
+				bool quit = false;
 
-				if (doonce)
+				//Event handler
+				SDL_Event e;
+
+				//Clear screen
+				SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
+				SDL_RenderClear(gRenderer);
+				SDL_SetRenderDrawColor(gRenderer, 0xFF, 0x00, 0x00, 0xFF);
+
+				//While application is running
+				while (!quit)
 				{
-				//	std::cout << doonce;
-					switch (algo)
+					//Handle events on queue
+					while (SDL_PollEvent(&e) != 0)
 					{
+						//User requests quit
+						if (e.type == SDL_QUIT)
+						{
+							quit = true;
+						}
+					}
+
+					if (doonce)
+					{
+						//	std::cout << doonce;
+
+						int k1{ 400 };
+						int w1{ 300 };
+						double omega{};
+						int k2{};
+						int w2{};
+						int l{};
+
+						switch (algo)
+						{
 						case 1:
 						{
 
 							for (int i = 1; i <= 100; ++i)
 							{
-								omega = 3.1415 / 180 * fi;
-								k2 = k1 + round(krok * cos(omega));
-								w2 = w1 - round(krok * sin(omega));
+								k2 = k1 + przelicz(1, krok, fi);
+								w2 = w1 - przelicz(0, krok, fi);
 								fi += dfi;
 								if (fi > 360) { fi -= 360; }
-								//std::cout << k1 << " " << w1 << " " << k2 << " " << w2 << " " << omega << '\n';
 								SDL_RenderDrawLine(gRenderer, k1, w1, k2, w2);
 								SDL_RenderPresent(gRenderer);
 								k1 = k2;
@@ -262,11 +273,8 @@ int main(int argc, char* args[])
 
 							for (int i = 1; i <= 250; ++i)
 							{
-								omega = 3.1415 / 180 * fi;
-								k2 = k1 + round(krok * cos(omega));
-								w2 = w1 - round(krok * sin(omega));
-
-								//std::cout << k1 << " " << w1 << " " << k2 << " " << w2 << " " << omega << '\n';
+								k2 = k1 + przelicz(1, krok, fi);
+								w2 = w1 - przelicz(0, krok, fi);
 								SDL_RenderDrawLine(gRenderer, k1, w1, k2, w2);
 								SDL_RenderPresent(gRenderer);
 								k1 = k2;
@@ -280,21 +288,25 @@ int main(int argc, char* args[])
 							}
 							break;
 						}
-						
+
+						}
+
 					}
-				
+					doonce = false;
+
+
+					//Update screen
+					SDL_RenderPresent(gRenderer);
 				}
-				doonce = false;
-			
-				
-				//Update screen
-				SDL_RenderPresent( gRenderer );
 			}
 		}
+
+		//Free resources and close SDL
+		close();
+		std::cout << "Jeszcze raz? (t/n) \n";
+		std::cin >> wybor;
+		jeszczeraz = false;
+		if (wybor == 116) { doonce = true; jeszczeraz = true; }
 	}
-
-	//Free resources and close SDL
-	close();
-
 	return 0;
 }
