@@ -175,13 +175,13 @@ int main(int argc, char* args[])
 			case 2:
 			{
 				std::cout << "Wybrano gwiazde\n";
-				std::cout << "Podaj krok: ";
+				std::cout << "Podaj krok (np. 80): ";
 				std::cin >> krok;
-				std::cout << "Podaj pierwszy kat: ";
+				std::cout << "Podaj pierwszy kat (np. 50): ";
 				std::cin >> d1;
-				std::cout << "Podaj drugi kat: ";
+				std::cout << "Podaj drugi kat (np.-50): ";
 				std::cin >> d2;
-				std::cout << "Modul: ";
+				std::cout << "Liczba krokow miedzt zmiana kata (np. 7): ";
 				std::cin >> m;
 			break;
 			}
