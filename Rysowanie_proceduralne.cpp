@@ -164,7 +164,7 @@ int main(int argc, char* args[])
 
 	while (jeszczeraz)
 	{
-	std::cout << "Wybierz algorytm:"<<"\n"<<" 1) Spirala wielokatna"<<"\n" << " 2) Gwiazda" << "\n";
+	std::cout << "Wybierz algorytm:"<<"\n"<<" 1) Spirala wielokatna"<<"\n" << " 2) Gwiazda" << "\n" << " 3) Krzywe biegunowe" << "\n";
 	std::cin >> algo;
 		switch (algo)
 		{
@@ -311,14 +311,14 @@ int main(int argc, char* args[])
 							{
 								omega = 0;
 								r = funkcjabiegunowa(k, a, b, omega);
-								k1 = 320 + round(r * cos(omega));
-								w1 =200 - round(r * sin(omega));
+								k1 = 320 + static_cast<int>(round(r * cos(omega)));
+								w1 =200 - static_cast<int>(round(r * sin(omega)));
 								for (int fi = 1; fi <= 360; ++fi)
 								{
 									omega = fi * radiany;
 									r = funkcjabiegunowa(k, a, b, omega);
-									k2 = 320 + round(r * cos(omega));
-									w2 = 200 - round(r * sin(omega));
+									k2 = 320 + static_cast<int>(round(r * cos(omega)));
+									w2 = 200 - static_cast<int>(round(r * sin(omega)));
 									SDL_RenderDrawLine(gRenderer, k1, w1, k2, w2);
 									SDL_RenderPresent(gRenderer);
 									k1 = k2;
