@@ -311,14 +311,14 @@ int main(int argc, char* args[])
 							{
 								omega = 0;
 								r = funkcjabiegunowa(k, a, b, omega);
-								k1 = 320 + static_cast<int>(round(r * cos(omega)));
-								w1 =200 - static_cast<int>(round(r * sin(omega)));
+								k1 = SCREEN_WIDTH/2 + static_cast<int>(round(r * cos(omega)));
+								w1 = SCREEN_HEIGHT/2 - static_cast<int>(round(r * sin(omega)));
 								for (int fi = 1; fi <= 360; ++fi)
 								{
 									omega = fi * radiany;
 									r = funkcjabiegunowa(k, a, b, omega);
-									k2 = 320 + static_cast<int>(round(r * cos(omega)));
-									w2 = 200 - static_cast<int>(round(r * sin(omega)));
+									k2 = SCREEN_WIDTH/2 + static_cast<int>(round(r * cos(omega)));
+									w2 = SCREEN_HEIGHT/2 - static_cast<int>(round(r * sin(omega)));
 									SDL_RenderDrawLine(gRenderer, k1, w1, k2, w2);
 									SDL_RenderPresent(gRenderer);
 									k1 = k2;
