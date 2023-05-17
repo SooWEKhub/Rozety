@@ -140,6 +140,11 @@ int przelicz(bool czycos, double krok, int fi)
 	return static_cast<int>(round(krok* sin(radiany* fi)));
 }
 
+double funkcjabiegunowa(int k, int a, int b, double omega)
+{
+	return k * cos(a * sin(b * omega));
+}
+
 int main(int argc, char* args[])
 {
 
@@ -154,6 +159,8 @@ int main(int argc, char* args[])
 	bool doonce{ true };
 	bool jeszczeraz{ 1 };
 	char wybor{};
+	int a{}, b{};
+	double r;
 
 	while (jeszczeraz)
 	{
@@ -184,6 +191,15 @@ int main(int argc, char* args[])
 				std::cout << "Liczba krokow miedzt zmiana kata (np. 7): ";
 				std::cin >> m;
 			break;
+			}
+			case 3:
+			{
+				std::cout << "Wybrano krzywe biegunowe\n";
+				std::cout << "Podaj A (np. 4): ";
+				std::cin >> a;
+				std::cout << "Podaj B (np. 2): ";
+				std::cin >> b;
+				break;
 			}
 
 			default:
@@ -285,6 +301,29 @@ int main(int argc, char* args[])
 								fi += dfi;
 								if (fi > 360) { fi -= 360; }
 								++l;
+							}
+							break;
+						}
+						case 3:
+						{
+
+							for (int k = 10; k <= 90; k+=10)
+							{
+								omega = 0;
+								r = funkcjabiegunowa(k, a, b, omega);
+								k1 = 320 + round(r * cos(omega));
+								w1 =200 - round(r * sin(omega));
+								for (int fi = 1; fi <= 360; ++fi)
+								{
+									omega = fi * radiany;
+									r = funkcjabiegunowa(k, a, b, omega);
+									k2 = 320 + round(r * cos(omega));
+									w2 = 200 - round(r * sin(omega));
+									SDL_RenderDrawLine(gRenderer, k1, w1, k2, w2);
+									SDL_RenderPresent(gRenderer);
+									k1 = k2;
+									w1 = w2;
+								}
 							}
 							break;
 						}
